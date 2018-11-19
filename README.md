@@ -25,7 +25,8 @@ Files & Function Headers:
 parse.c
 
 	Handles all line parsing functions
-	/*======== int count_tokens() ==========
+	```
+	int count_tokens()
 	Inputs:  char *line
         	  char delim 
 	Returns: Number of tokens in line separated by delim
@@ -35,7 +36,7 @@ parse.c
 	The number of tokens is 1 more than the number of appearences 
 	of delim
 	If delim does not appear, 1 is returned
-	====================*/
+	```
 
 	/*======== char ** parse_line() ==========
 	Inputs:  char *line 
