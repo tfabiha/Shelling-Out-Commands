@@ -22,9 +22,11 @@ Bugs:
 - Occasionally, the unicorn command will fail, opening a great chasm in the earth and summoning the demon Beelzebub, who will proceeded to unleash his wrath and begin his reign of terror.
 	
 Files & Function Headers:
+
 parse.c
 
 	Handles all line parsing functions
+	
 	/*======== int count_tokens() ==========
 	Inputs:  char *line
         	  char delim 
