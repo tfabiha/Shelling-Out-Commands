@@ -2,28 +2,29 @@ dojo
 by Tabassum Fabiha and Ivan Zhang
 
 Features:
-	Forks and executes commands!
-	Parses multiple commands on one line!
-	Redirects using >, <!
-	Guaranteed to regrow hair!
-	Can summon a winged unicorn for fast & magical transit!
+- Forks and executes commands!
+- Parses multiple commands on one line!
+- Redirects using >, <!
+- Guaranteed to regrow hair!
+- Can summon a winged unicorn for fast & magical transit!
 
 Attempted:
-	The following did not end up working, but have been left in the code, commented out.
-	Could not get pipes to work
-	Tried to implement >>, but it kept overwriting the file
-	Looked at replacing ~/ with home directory, got seg faults
-	Was unable to have the "puppy" command produce a puppy and eject it from the optical drive.
+The following did not end up working, but have been left in the code, commented out.
+- Could not get pipes to work
+- Tried to implement >>, but it kept overwriting the file
+- Looked at replacing ~/ with home directory, got seg faults
+- Was unable to have the "puppy" command produce a puppy and eject it from the optical drive.
 
 Bugs:
-	Putting two ;'s next to each other will break the parser
-	Redirecting to a file that does not exist occasionally does not work.
-	Hair regrowth function may result in a seg fault.
-	Occasionally, the unicorn command will fail, opening a great chasm in the earth and summoning the demon Beelzebub, who will proceeded to unleash his wrath and begin his reign of terror.
+- Putting two ;'s next to each other will break the parser
+- Redirecting to a file that does not exist occasionally does not work.
+- Hair regrowth function may result in a seg fault.
+- Occasionally, the unicorn command will fail, opening a great chasm in the earth and summoning the demon Beelzebub, who will proceeded to unleash his wrath and begin his reign of terror.
 	
 Files & Function Headers:
-parse.c
-	Handles all line parsing fucntions
+- parse.c
+
+	Handles all line parsing functions
 	/*======== int count_tokens() ==========
 	Inputs:  char *line
         	  char delim 
