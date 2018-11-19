@@ -23,9 +23,7 @@ Bugs:
 	
 Files & Function Headers:
 
-parse.c
-
-	Handles all line parsing functions
+parse.c Handles all line parsing functions
 	
 	/*======== int count_tokens() ==========
 	Inputs:  char *line
