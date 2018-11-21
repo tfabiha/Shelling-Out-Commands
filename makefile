@@ -7,5 +7,8 @@ dojo.o: dojo.c tools.h
 tools.o: tools.c tools.h
 	gcc -c -g tools.c
 
-run: 
+run:
 	./a.out
+
+clean:
+	rm *.o; rm *.*.gch; rm a.out

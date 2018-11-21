@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 int main(int argc, char **argv){
+<<<<<<< HEAD
   while(1)
     {
       char str[60];
@@ -15,5 +16,4 @@ int main(int argc, char **argv){
 	}
 
     }
-
 }
