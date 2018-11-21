@@ -1,11 +1,11 @@
-dojobash: dojo.o tools.o tools.h
-	gcc dojo.o tools.o -c dojobash
+all: dojo.o tools.o tools.h
+	gcc dojo.o tools.o
 
 dojo.o: dojo.c tools.h
-	gcc -g dojo.c
+	gcc -c -g dojo.c
 
 tools.o: tools.c tools.h
-	gcc -g tools.c
+	gcc -c -g tools.c
 
 run: 
 	./a.out
