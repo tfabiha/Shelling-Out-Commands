@@ -1,18 +1,27 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <string.h>
 
 int main(int argc, char **argv){
   while(1)
     {
       char str[60];
-      printf("this is working\n");
+      printf("Dojo:$ ");
 
-      if (fgets(str, 60, stdin) != NULL)
+      if (fgets(str, 60, stdin) == NULL)
 	{
-	  printf("I got this from you: %s\n", str);
+	  printf("Error has been found. Exiting.\n");
+	  
+	}
+
+      if (strcmp(str, "exit\n") == 0)
+	{
+	  printf("exiting\n");
 	  return 0;
 	}
+
+      
 
     }
 }
