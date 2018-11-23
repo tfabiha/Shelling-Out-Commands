@@ -28,7 +28,7 @@ int main(int argc, char **argv){
       //   return 0;
       // }
       trim(cmds);
-      char** _args = parse_args(cmds);
+      char** _args = parse_args_commas(cmds);
       int n_tokens = countTokens(_args);
       if(n_tokens > 0){
         int f = fork();
@@ -36,7 +36,7 @@ int main(int argc, char **argv){
           wait(&f);
         }
         else{
-          run_command(_args);
+          run_multiple_cmd(_args);
         }
       }
 

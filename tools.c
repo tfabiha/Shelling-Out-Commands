@@ -5,8 +5,8 @@
 
 #include "tools.h"
 
-char** parse_args( char* line ){
-
+char** parse_args_spaces( char* line ){
+  line = trim(line);
   char** args = calloc(256, sizeof(char**)); //Might need to edit 256
 
   for(int i = 0; line; i++){
@@ -16,13 +16,27 @@ char** parse_args( char* line ){
   return args;
 }
 
-void trim(char *str){
+char** parse_args_commas( char* line ){
+  char** args = calloc(256, sizeof(char**)); //Might need to edit 256
+
+  for(int i = 0; line; i++){
+    args[i] = strsep(&line, ";");
+  }
+  return args;
+}
+
+char* trim(char *str){
   size_t size = strlen(str);
+  char * orig = str;
+  while(*orig=='\n' || *orig==' '){
+    orig++;
+  }
   str = str + size - 1;
   while(*str=='\n' || *str==' '){
     *str = '\0';
     str-=1;
   }
+  return orig;
 }
 
 void run_command(char **ary){
@@ -31,7 +45,15 @@ void run_command(char **ary){
 
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
-    printf("%s\n", ary[i]);
+    char** argy = parse_args_spaces(ary[i]);
+    int f = fork();
+    if(f){
+      wait(&f);
+    }
+    else{
+      run_command(argy);
+      free(argy);
+    }
   }
   return 0;
 }
