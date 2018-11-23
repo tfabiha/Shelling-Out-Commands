@@ -5,4 +5,8 @@ int run_multiple_cmd(char**ary);
 
 char** parse_args(char* line);
 
+int countTokens(char **ary);
+
+void trim(char *str);
+
 #endif
