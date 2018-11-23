@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "tools.h"
 
@@ -17,11 +18,15 @@ char** parse_args( char* line ){
 
 void trim(char *str){
   size_t size = strlen(str);
-  str = str + size - 2;
-  while(*str==' '){
+  str = str + size - 1;
+  while(*str=='\n' || *str==' '){
     *str = '\0';
     str-=1;
   }
+}
+
+void run_command(char **ary){
+  execvp(ary[0], ary);
 }
 
 int run_multiple_cmd(char **ary){
@@ -32,10 +37,7 @@ int run_multiple_cmd(char **ary){
 }
 
 int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ returns 4
-  int i = 0;
-  while(ary[i]){
-    i++;
-  }
+  int i = sizeof(ary)/sizeof(ary[0]);
   return i;
 
 }

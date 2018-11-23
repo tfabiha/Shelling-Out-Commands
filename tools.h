@@ -9,4 +9,6 @@ int countTokens(char **ary);
 
 void trim(char *str);
 
+void run_command(char **ary);
+
 #endif
