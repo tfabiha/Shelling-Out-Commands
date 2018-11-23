@@ -11,4 +11,4 @@ run:
 	./a.out
 
 clean:
-	rm *.o; rm *.*.gch; rm a.out
+	rm *.o; rm *.*.gch; rm a.out; rm *#.#*; rm -rf *.dSYM
