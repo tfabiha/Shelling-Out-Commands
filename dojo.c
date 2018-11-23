@@ -3,7 +3,13 @@
 #include <unistd.h>
 #include <string.h>
 
+#include "tools.h"
+
 int main(int argc, char **argv){
+  char*arg = malloc(20);
+    arg = "This is cool";
+  char** _args = parse_args(arg);
+  //run_multiple_cmd(_args);
   while(1)
     {
       char str[60];
