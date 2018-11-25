@@ -35,13 +35,7 @@ int main(int argc, char **argv){
       // }
       int n_tokens = countTokens(_args);
       if(n_tokens > 0){
-        int f = fork();
-        if(f){
-          wait(&f);
-        }
-        else{
           run_multiple_cmd(_args);
-        }
       }
 
       //run_multiple_cmd(_args);
