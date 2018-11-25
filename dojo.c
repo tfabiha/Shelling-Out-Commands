@@ -10,7 +10,9 @@ int main(int argc, char **argv){
   while(1)
   {
     char cmds[100];
-    printf("Dojo:$ ");
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("%s Dojo:$ ",cwd);
     if (fgets(cmds, 60, stdin) == NULL)
     {
       printf("Error has been found. Exiting.\n");
