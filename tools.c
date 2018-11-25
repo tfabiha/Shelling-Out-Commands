@@ -5,22 +5,13 @@
 
 #include "tools.h"
 
-char** parse_args_spaces( char* line ){
+char** parse_args(char* line, char c){
   line = trim(line);
   char** args = calloc(256, sizeof(char**)); //Might need to edit 256
 
   for(int i = 0; line; i++){
-    args[i] = strsep(&line, " ");
+    args[i] = strsep(&line, &c);
 
-  }
-  return args;
-}
-
-char** parse_args_commas( char* line ){
-  char** args = calloc(256, sizeof(char**)); //Might need to edit 256
-
-  for(int i = 0; line; i++){
-    args[i] = strsep(&line, ";");
   }
   return args;
 }
@@ -45,7 +36,7 @@ void run_command(char **ary){
 
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
-    char** argy = parse_args_spaces(ary[i]);
+    char** argy = parse_args(ary[i], ' ');
     int f = fork();
     if(f){
       wait(&f);
