@@ -21,7 +21,7 @@ int main(int argc, char **argv){
     {
       if (strcmp(cmds, "exit\n") == 0)
       {
-        printf("exiting\n");
+        printf("exiting\033[0m\n");
         return 0;
       }
       // if (strcmp(cmds, "exit\n") == 0) FOR CODING CD
