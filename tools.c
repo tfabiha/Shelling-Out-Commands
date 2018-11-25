@@ -52,14 +52,8 @@ int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
     //printf("%s\n", ary[i]);
     char** argy = parse_args(ary[i], ' ');
-    int f = fork();
-    if(f){
-      wait(&f);
-    }
-    else{
-      run_command(argy);
-      free(argy);
-    }
+    run_command(argy);
+    free(argy);
   }
   return 0;
 }
