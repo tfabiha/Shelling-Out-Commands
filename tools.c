@@ -7,6 +7,9 @@
 
 char** parse_args(char* line, char c){
   line = trim(line);
+  // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
+  // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
+  // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
   char** args = calloc(256, sizeof(char**)); //Might need to edit 256
 
   for(int i = 0; line; i++){
@@ -53,4 +56,14 @@ int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ return
   int i = sizeof(ary)/sizeof(ary[0]);
   return i;
 
+}
+
+int check_char_cmd(char *ary, char c){ //Returns 1 (True) if c in ary, else 0 (False)
+  while(*ary){
+    if(*ary == c){
+      return 1;
+    }
+    ary++;
+  }
+  return 0;
 }

@@ -11,8 +11,6 @@ char* trim(char *str);
 
 void run_command(char **ary);
 
-int check_redirect();
-
-int check_pipe();
+int check_char_cmd(char *ary, char c);
 
 #endif
