@@ -6,16 +6,26 @@
 #include "tools.h"
 
 char** parse_args(char* line, char c){
+  //printf("%s, %c\n", line, c);
   line = trim(line);
   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
   char** args = calloc(256, sizeof(char**)); //Might need to edit 256
-
-  for(int i = 0; line; i++){
-    args[i] = strsep(&line, &c);
-
+  int i = 0;
+  if(check_char_cmd(line, c)){
+    while ((args[i] = strsep(&line, &c)) != NULL){
+      i++;
+    }
   }
+  else{
+    args[0] = line;
+  }
+  // for(int i = 0; args[i]; i++){
+  //   printf("%s\n", args[i]);
+  // }
+
+  //printf("%s, %s, %c\n", args[0], args[1], c);
   return args;
 }
 
@@ -34,11 +44,13 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
+  //printf("%s\n", ary[1]);
   execvp(ary[0], ary);
 }
 
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
+    //printf("%s\n", ary[i]);
     char** argy = parse_args(ary[i], ' ');
     int f = fork();
     if(f){

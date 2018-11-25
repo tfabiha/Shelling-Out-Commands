@@ -29,8 +29,10 @@ int main(int argc, char **argv){
       //   printf("exiting\n");
       //   return 0;
       // }
-      trim(cmds);
       char** _args = parse_args(cmds, ';');
+      // for(int i = 0; _args[i]; i++){
+      //   printf("%s\n", _args[i]);
+      // }
       int n_tokens = countTokens(_args);
       if(n_tokens > 0){
         int f = fork();
