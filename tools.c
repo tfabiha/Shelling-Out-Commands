@@ -22,11 +22,11 @@ char** parse_args(char* line, char c){
 char* trim(char *str){
   size_t size = strlen(str);
   char * orig = str;
-  while(*orig=='\n' || *orig==' '){
+  while(*orig=='\n' || *orig==' ' || *orig=='\t'){
     orig++;
   }
   str = str + size - 1;
-  while(*str=='\n' || *str==' '){
+  while(*str=='\n' || *str==' ' || *str=='\t'){
     *str = '\0';
     str-=1;
   }
