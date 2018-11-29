@@ -28,14 +28,9 @@ int main(int argc, char **argv){
       // for(int i = 0; _args[i]; i++){
       //   printf("%s\n", _args[i]);
       // }
-      int ext = 0;
-
       int n_tokens = countTokens(_args);
       if(n_tokens > 0){
-          ext = run_multiple_cmd(_args);
-
-          if (ext)
-            return 0;
+          run_multiple_cmd(_args);
       }
 
     }

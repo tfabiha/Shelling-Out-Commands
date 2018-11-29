@@ -44,8 +44,8 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
-  //printf("%s\n", ary[1]);
   execvp(ary[0], ary);
+  exit(EXIT_SUCCESS);
 }
 
 int run_multiple_cmd(char **ary){
@@ -56,8 +56,8 @@ int run_multiple_cmd(char **ary){
     {
       printf("exiting\033[0m\n");
       free(argy);
-      
-      return 1;
+
+      exit(EXIT_SUCCESS);
     }
 
     if (strcmp(argy[0], "cd") == 0)
