@@ -21,11 +21,7 @@ char** parse_args(char* line, char c){
   else{
     args[0] = line;
   }
-  // for(int i = 0; args[i]; i++){
-  //   printf("%s\n", args[i]);
-  // }
-
-  //printf("%s, %s, %c\n", args[0], args[1], c);
+  
   return args;
 }
 
