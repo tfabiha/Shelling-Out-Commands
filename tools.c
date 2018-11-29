@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
+#include <string.h>
 #include <sys/wait.h>
+#include <errno.h>
+#include <signal.h>
 
 #include "tools.h"
 
@@ -14,6 +16,7 @@ char** parse_args(char* line, char c){
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
   char** args = calloc(256, sizeof(char**)); //Might need to edit 256
   int i = 0;
+
   if(check_char_cmd(line, c)){
     while ((args[i] = strsep(&line, &c)) != NULL){
       i++;
@@ -22,26 +25,33 @@ char** parse_args(char* line, char c){
   else{
     args[0] = line;
   }
-  
+
   return args;
 }
 
 char* trim(char *str){
   size_t size = strlen(str);
   char * orig = str;
-   while(*orig=='\n' || *orig==' '){
-     orig++;
-   }
-   str = str + size - 1;
-   while(*str=='\n' || *str==' '){
-     *str = '\0';
-     str-=1;
-   }
-   return orig;
+
+  while(*orig=='\n' || *orig==' '){
+   orig++;
+  }
+
+  str = str + size - 1;
+
+  while(*str=='\n' || *str==' '){
+   *str = '\0';
+   str-=1;
+  }
+
+  
+
+  return orig;
 }
 
 void run_command(char **ary){
   execvp(ary[0], ary);
+  printf("%s: command not found\n", ary[0]);
   exit(EXIT_SUCCESS);
 }
 
@@ -64,6 +74,7 @@ int run_multiple_cmd(char **ary){
     else
     {
       int f = fork();
+
       if(f){
         wait(&f);
       }
@@ -71,15 +82,17 @@ int run_multiple_cmd(char **ary){
         run_command(argy);
       }
     }
+
     free(argy);
   }
+
   return 0;
 }
 
 int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ returns 4
   int i = sizeof(ary)/sizeof(ary[0]);
-  return i;
 
+  return i;
 }
 
 int check_char_cmd(char *ary, char c){ //Returns 1 (True) if c in ary, else 0 (False)
@@ -87,7 +100,9 @@ int check_char_cmd(char *ary, char c){ //Returns 1 (True) if c in ary, else 0 (F
     if(*ary == c){
       return 1;
     }
+
     ary++;
   }
+
   return 0;
 }
