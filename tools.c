@@ -29,33 +29,15 @@ char** parse_args(char* line, char c){
 char* trim(char *str){
   size_t size = strlen(str);
   char * orig = str;
-  char * trim_mid = str;
-
-  str = str + size - 1;
-  while(*str=='\n' || *str==' ' || *str=='\t'){
-    *str = '\0';
-    str-=1;
-  }
-
-  int count_sp = 0;
-  while(*trim_mid){
-    if(count_sp == 1){
-      while ((*trim_mid && *(trim_mid+1)) && (*trim_mid == '\n' || *trim_mid == '\t' || *trim_mid == ' ')){
-	*trim_mid = *(trim_mid+1);
-	trim_mid++;
-      }
-      count_sp = 0;
-      
-    }
-    else{
-      if(*trim_mid == '\n' || *trim_mid == '\t' || *trim_mid == ' '){
-	count_sp++;
-      }
-    }
-    
-  }
-  
-  return orig;
+   while(*orig=='\n' || *orig==' '){
+     orig++;
+   }
+   str = str + size - 1;
+   while(*str=='\n' || *str==' '){
+     *str = '\0';
+     str-=1;
+   }
+   return orig;
 }
 
 void run_command(char **ary){
