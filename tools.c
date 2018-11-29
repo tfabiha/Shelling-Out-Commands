@@ -51,12 +51,28 @@ void run_command(char **ary){
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
     char** argy = parse_args(ary[i], ' ');
-    int f = fork();
-    if(f){
-      wait(&f);
+
+    if (strcmp(argy[0], "exit") == 0)
+    {
+      printf("exiting\033[0m\n");
+      free(argy);
+      
+      return 1;
     }
-    else{
-      run_command(argy);
+
+    if (strcmp(argy[0], "cd") == 0)
+    {
+        chdir(argy[1]);
+    }
+    else
+    {
+      int f = fork();
+      if(f){
+        wait(&f);
+      }
+      else{
+        run_command(argy);
+      }
     }
     free(argy);
   }
