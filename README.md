@@ -1,5 +1,5 @@
 dojo
-by Tabassum Fabiha and Ivan Zhang
+by T Fabiha and Ivan Zhang
 
 Features:
 - Forks and executes commands!

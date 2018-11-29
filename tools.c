@@ -22,11 +22,7 @@ char** parse_args(char* line, char c){
   else{
     args[0] = line;
   }
-  // for(int i = 0; args[i]; i++){
-  //   printf("%s\n", args[i]);
-  // }
-
-  //printf("%s, %s, %c\n", args[0], args[1], c);
+  
   return args;
 }
 
@@ -63,19 +59,35 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
-  //printf("%s\n", ary[1]);
   execvp(ary[0], ary);
+  exit(EXIT_SUCCESS);
 }
 
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
     char** argy = parse_args(ary[i], ' ');
-    int f = fork();
-    if(f){
-      wait(&f);
+
+    if (strcmp(argy[0], "exit") == 0)
+    {
+      printf("exiting\033[0m\n");
+      free(argy);
+
+      exit(EXIT_SUCCESS);
     }
-    else{
-      run_command(argy);
+
+    if (strcmp(argy[0], "cd") == 0)
+    {
+        chdir(argy[1]);
+    }
+    else
+    {
+      int f = fork();
+      if(f){
+        wait(&f);
+      }
+      else{
+        run_command(argy);
+      }
     }
     free(argy);
   }
