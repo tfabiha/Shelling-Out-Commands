@@ -44,9 +44,34 @@ char* trim(char *str){
    str-=1;
   }
 
-  
+  char * new_str = malloc(size);
+  int str_count = 0;
+  char * point_org = orig;
 
-  return orig;
+  int space_counter = 0;
+
+
+  while (*point_org)
+  {
+    //printf("Got here!\n");
+    if (*point_org == ' ' && space_counter)
+    {
+      point_org++;
+    }
+    else
+    {
+      space_counter = *point_org == ' ';
+
+      new_str[str_count] = *point_org;
+      point_org++;
+      str_count++;
+    }
+
+  }
+
+  new_str[str_count] = '\0';
+
+  return new_str;
 }
 
 void run_command(char **ary){
