@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <fcntl.h>
 
 #include "tools.h"
 
@@ -22,7 +23,7 @@ char** parse_args(char* line, char c){
   else{
     args[0] = line;
   }
-  
+
   return args;
 }
 
@@ -45,35 +46,74 @@ void run_command(char **ary){
   exit(EXIT_SUCCESS);
 }
 
+void run_redirection(char **ary, int direction){ // 1: >, 0: <
+  int new_file = open(trim(ary[1]), O_CREAT | O_WRONLY, 0666);
+  if(direction){ // >
+    int std_out = dup(1);
+    dup2(new_file, 1);
+    int f = fork();
+	  if(f){
+	    wait(&f);
+	  }
+	  else{
+      run_command(ary);
+	  }
+
+  }
+  else{ // <
+
+  }
+}
+
+void run_pipe(char **ary){
+
+}
+
 int run_multiple_cmd(char **ary){
+  char** argy;
   for(int i = 0; ary[i]; i++){
-    char** argy = parse_args(ary[i], ' ');
-
-    if (strcmp(argy[0], "exit") == 0)
-    {
-      printf("exiting\033[0m\n");
-      free(argy);
-
-      exit(EXIT_SUCCESS);
+    if(check_char_cmd(ary[i], '>')){
+      argy = parse_args(ary[i], '>');
+      run_redirection(argy, 1);
+    }
+    else if(check_char_cmd(ary[i], '<')){
+      argy = parse_args(ary[i], '<');
+      run_redirection(argy, 0);
+    }
+    else if(check_char_cmd(ary[i], '|')){
+      argy = parse_args(ary[i], '|');
+      run_pipe(argy);
     }
 
-    if (strcmp(argy[0], "cd") == 0)
-    {
-        chdir(argy[1]);
-    }
-    else
-    {
-      int f = fork();
-      if(f){
-        wait(&f);
+    else{
+      argy = parse_args(ary[i], ' ');
+
+      if (strcmp(argy[0], "exit") == 0)
+      {
+        printf("exiting\033[0m\n");
+        free(argy);
+
+        exit(EXIT_SUCCESS);
       }
-      else{
-        run_command(argy);
+
+      if (strcmp(argy[0], "cd") == 0)
+      {
+        chdir(argy[1]);
+      }
+      else
+      {
+        int f = fork();
+        if(f){
+          wait(&f);
+        }
+        else{
+          run_command(argy);
+        }
       }
     }
     free(argy);
-  }
-  return 0;
+    }
+    return 0;
 }
 
 int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ returns 4
