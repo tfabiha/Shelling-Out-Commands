@@ -48,17 +48,41 @@ void run_command(char **ary){
   execvp(ary[0], ary);
 }
 
+int piping(char *ary){
+  char** argy = parse_args(ary, '|');
+  char stuff[1024];
+  FILE *ps_in;
+  FILE *ps_out;
+  for(int i = 0; argy[i]; i++){
+    ps_in = popen(argy[i], "r");
+    ps_out = popen(argy[i+1], "w");
+
+    while (fgets(stuff, 1024, ps_in))
+      fputs(stuff, ps_out);
+    pclose(ps_in);
+    pclose(ps_out);
+  }
+  return 0;
+
+}
+
+
 int run_multiple_cmd(char **ary){
   for(int i = 0; ary[i]; i++){
-    char** argy = parse_args(ary[i], ' ');
-    int f = fork();
-    if(f){
-      wait(&f);
+    if(check_char_cmd(ary[i], '|')){
+      piping(ary[i]);
     }
     else{
-      run_command(argy);
+      char** argy = parse_args(ary[i], ' ');
+      int f = fork();
+      if(f){
+        wait(&f);
+      }
+      else{
+        run_command(argy);
+      }
+      free(argy);
     }
-    free(argy);
   }
   return 0;
 }
