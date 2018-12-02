@@ -142,24 +142,31 @@ void run_command_custom(char **ary, int fd){
 void redirect_STDIN(char *ary){
   char** args = parse_args(ary, '<');
   char** cmds;
-  int std_out = dup(STDIN_FILENO);
-  int switcheroo = 1;
-  for(int i = 0; args[i+1]; i++){
-    int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
-    switcheroo = dup2(new_file, switcheroo);
+  int std_in = dup(STDIN_FILENO);
+  int switcheroo = 0;
+  for(int i = 1; args[i]; i++){
+    char * filename = trim(args[i]);
+    int read_file = open(filename, O_RDONLY);
+    switcheroo = dup2(read_file, switcheroo);
+
+    // struct stat file;
+    // stat(filename, &file);
+    // int size = file.st_size;
+    // printf("%d\n", size);
+    // write(read_file, stdin, size);
 
     int f = fork();
     if(f){
 	    wait(&f);
 	  }
 	  else{
-      cmds = parse_args(args[i], ' ');
+      cmds = parse_args(args[0], ' ');
       run_command(cmds);
 	  }
 
       //file = open(trim(args[i]), O_RDONLY);
     }
-  dup2(std_out, switcheroo);
+  dup2(std_in, switcheroo);
   free(args);
 }
 
@@ -216,7 +223,7 @@ int run_multiple_cmd(char **ary){
       //run_redirection(argy, 1);
     }
     else if(check_char_cmd(ary[i], '<')){
-      argy = parse_args(ary[i], '<');
+      redirect_STDIN(ary[i]);
       //run_redirection(argy, 0);
     }
     else if(check_char_cmd(ary[i], '>')){
