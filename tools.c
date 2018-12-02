@@ -98,6 +98,43 @@ void run_command_custom(char **ary, int fd){
   exit(EXIT_SUCCESS);
 }
 
+// int piping(char **ary){
+//   int fds[2];
+//   for(int i = 0; ary[i+1]; i++){
+//     pipe(fds);
+//     int f = fork();
+//     if(f){
+//       fds[1] = STDOUT_FILENO;
+//     }
+//     else{
+//
+//     }
+//   }
+// }
+
+
+// int piping(char **ary){
+//   int p[2],tmp;
+//   for(int i = 0; ary[i+1]; i++){
+//     pipe(p);
+//     if(fork()){
+// 				close(p[1]);
+// 				tmp=dup(STDIN_FILENO);
+// 				dup2(p[0],STDIN_FILENO);
+// 				wait(0);
+// 				dup2(tmp,STDIN_FILENO);
+// 				close(p[0]);
+// 		}else{
+// 				close(p[0]);
+// 				tmp=dup(STDOUT_FILENO);
+// 				dup2(p[1],STDOUT_FILENO);
+// 				run_command(ary[i]);
+// 				dup2(tmp,STDOUT_FILENO);
+// 				close(p[1]);
+// 				exit(0);
+// 		}
+//   }
+// }
 void redirect_STDIN(char *ary){
   char** args = parse_args(ary, '<');
   char** cmds;
@@ -119,7 +156,7 @@ void redirect_STDIN(char *ary){
 
       //file = open(trim(args[i]), O_RDONLY);
     }
-  dup2(std_in, switcheroo);
+  dup2(std_in, 0);
   free(args);
 }
 
@@ -145,7 +182,7 @@ void redirect_STDOUT(char *ary){
     }
     else{
       //int c;
-        dup2(std_out, switcheroo);
+        dup2(std_out, 1);
         char * filen = trim(args[i]);
         int read_file = open(filen, O_RDONLY, 0664);
         //printf("hi\n", trim(args[i]));
