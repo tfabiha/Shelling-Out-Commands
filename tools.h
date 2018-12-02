@@ -19,5 +19,5 @@ void redirect_STDOUT(char *ary);
 
 int check_char_cmd(char *ary, char c);
 
-int piping(char **ary);
+void piping(char *ary);
 #endif
