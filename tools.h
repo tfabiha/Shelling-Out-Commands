@@ -13,8 +13,6 @@ void run_command(char **ary);
 
 void run_redirection(char **ary, int direction);
 
-void run_pipe(char **ary);
-
 int check_char_cmd(char *ary, char c);
 
 int piping(char *ary);

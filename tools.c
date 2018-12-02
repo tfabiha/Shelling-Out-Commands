@@ -63,7 +63,10 @@ char* trim(char *str){
     {
       space_counter = *point_org == ' ';
 
-      new_str[str_count] = *point_org;
+      if(new_str[str_count] != ' '){
+        new_str[str_count] = *point_org;
+
+      }
       point_org++;
       str_count++;
     }
@@ -76,32 +79,15 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
+
   execvp(ary[0], ary);
-  printf("%s: command not found\n", ary[0]);
+  if(strcmp(ary[0], "")){
+    printf("%s: command not found\n", ary[0]);
+  }
   exit(EXIT_SUCCESS);
 }
 
 void run_redirection(char **ary, int direction){ // 1: >, 0: <
-  int new_file = open(trim(ary[1]), O_CREAT | O_WRONLY, 0666);
-  if(direction){ // >
-    int std_out = dup(1);
-    dup2(new_file, 1);
-    int f = fork();
-	  if(f){
-	    wait(&f);
-	  }
-	  else{
-      run_command(ary);
-	  }
-
-  }
-  else{ // <
-
-  }
-}
-
-void run_pipe(char **ary){
-
 }
 
 int piping(char *ary){
@@ -126,14 +112,9 @@ int piping(char *ary){
 int run_multiple_cmd(char **ary){
   char** argy;
   for(int i = 0; ary[i]; i++){
-<<<<<<< HEAD
-    if(check_char_cmd(ary[i], '|')){
-      piping(ary[i]);
-=======
     if(check_char_cmd(ary[i], '>')){
       argy = parse_args(ary[i], '>');
       run_redirection(argy, 1);
->>>>>>> c54c61ba89ad22c65272f8b901a3ff742d3f3f91
     }
     else if(check_char_cmd(ary[i], '<')){
       argy = parse_args(ary[i], '<');
@@ -141,22 +122,10 @@ int run_multiple_cmd(char **ary){
     }
     else if(check_char_cmd(ary[i], '|')){
       argy = parse_args(ary[i], '|');
-      run_pipe(argy);
+
     }
 
     else{
-<<<<<<< HEAD
-      char** argy = parse_args(ary[i], ' ');
-      int f = fork();
-      if(f){
-        wait(&f);
-      }
-      else{
-        run_command(argy);
-      }
-      free(argy);
-    }
-=======
       argy = parse_args(ary[i], ' ');
 
       if (strcmp(argy[0], "exit") == 0)
@@ -170,39 +139,23 @@ int run_multiple_cmd(char **ary){
       if (strcmp(argy[0], "cd") == 0)
       {
         chdir(argy[1]);
-<<<<<<< HEAD
-=======
     }
     else
     {
       int f = fork();
-
       if(f){
         wait(&f);
->>>>>>> 455d53acb445b58489380dc49bbacc0a582ca8a3
       }
-      else
-      {
-        int f = fork();
-        if(f){
-          wait(&f);
-        }
-        else{
-          run_command(argy);
-        }
+      else{
+        run_command(argy);
       }
     }
 
     free(argy);
-<<<<<<< HEAD
     }
-    return 0;
-=======
->>>>>>> c54c61ba89ad22c65272f8b901a3ff742d3f3f91
-  }
 
+  }
   return 0;
->>>>>>> 455d53acb445b58489380dc49bbacc0a582ca8a3
 }
 
 int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ returns 4

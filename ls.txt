@@ -1,1 +1,35 @@
-[31mDojo:[0m[32m/home/students/2019/izhang1/Desktop/dojo[0m[35m$[0m[38;5;206m 
+ls : command not found
+[31mDojo:[0m[32m/Users/ivan/Desktop/dojo[0m[35m$[0m[38;5;206m README.md
+a.out
+checklist.md
+dojo.c
+dojo.o
+ls.txt
+makefile
+tools.c
+tools.h
+tools.o
+[31mDojo:[0m[32m/Users/ivan/Desktop/dojo[0m[35m$[0m[38;5;206m README.md
+a.out
+checklist.md
+dojo.c
+dojo.o
+ls.txt
+makefile
+tools.c
+tools.h
+tools.o
+[31mDojo:[0m[32m/Users/ivan/Desktop/dojo[0m[35m$[0m[38;5;206m README.md
+a.out
+checklist.md
+dojo.c
+dojo.o
+ls.txt
+makefile
+tools.c
+tools.h
+tools.o
+[31mDojo:[0m[32m/Users/ivan/Desktop/dojo[0m[35m$[0m[38;5;206m [0m
+[0m
+[0m
+[0m
