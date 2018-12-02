@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <signal.h>
+#include <sys/stat.h>
 
 #include "tools.h"
 
@@ -167,6 +168,7 @@ void redirect_STDOUT(char *ary){
   char** cmds;
   int std_out = dup(STDOUT_FILENO);
   int switcheroo = 1;
+  int toTrunc = 0;
   for(int i = 0; args[i+1]; i++){
     int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
     switcheroo = dup2(new_file, switcheroo);
@@ -183,14 +185,24 @@ void redirect_STDOUT(char *ary){
     }
     else{
       //int c;
-        dup2(std_out, 1);
-        int read_file = open(trim(args[i]), O_RDONLY, 0664);
+        dup2(std_out, switcheroo);
+        char * filen = trim(args[i]);
+        int read_file = open(filen, O_RDONLY, 0664);
         //printf("hi\n", trim(args[i]));
-        char store[1024];
-        read(read_file, store, sizeof(store));
-        write(new_file, store, sizeof(store));
-        open(trim(args[i+1]), O_CREAT, 0664);
+        struct stat file;
+        stat(filen, &file);
+        int size = file.st_size;
+        //printf("%d\n", size);
+        char store[size];
+        read(read_file, store, size);
+        //printf("%s\n", store);
+        write(new_file, store, size);
+        toTrunc = 1;
       }
+    if(toTrunc){
+      open(trim(args[i]), O_TRUNC | O_WRONLY, 0664);
+    }
+      //open(trim(args[i]), O_TRUNC | O_WRONLY, 0664);
   }
   dup2(std_out, switcheroo);
   free(args);
