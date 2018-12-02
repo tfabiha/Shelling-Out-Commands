@@ -15,5 +15,5 @@ void run_redirection(char **ary, int direction);
 
 int check_char_cmd(char *ary, char c);
 
-int piping(char *ary);
+int piping(char **ary);
 #endif

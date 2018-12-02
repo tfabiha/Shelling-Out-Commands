@@ -90,14 +90,13 @@ void run_command(char **ary){
 void run_redirection(char **ary, int direction){ // 1: >, 0: <
 }
 
-int piping(char *ary){
-  char** argy = parse_args(ary, '|');
+int piping(char **ary){
   char stuff[1024];
   FILE *ps_in;
   FILE *ps_out;
-  for(int i = 0; argy[i]; i++){
-    ps_in = popen(argy[i], "r");
-    ps_out = popen(argy[i+1], "w");
+  for(int i = 0; ary[i+1]; i++){
+    ps_in = popen(ary[i], "r");
+    ps_out = popen(ary[i+1], "w");
 
     while (fgets(stuff, 1024, ps_in))
       fputs(stuff, ps_out);
@@ -122,6 +121,7 @@ int run_multiple_cmd(char **ary){
     }
     else if(check_char_cmd(ary[i], '|')){
       argy = parse_args(ary[i], '|');
+      piping(argy);
 
     }
 
