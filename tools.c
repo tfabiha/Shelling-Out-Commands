@@ -87,41 +87,104 @@ void run_command(char **ary){
   exit(EXIT_SUCCESS);
 }
 
-void run_redirection(char **ary, int direction){ // 1: >, 0: <
+// int piping(char **ary){
+//   char stuff[1024];
+//   FILE *ps_in;
+//   FILE *ps_out;
+//   for(int i = 0; ary[i+1]; i++){
+//     ps_in = popen(ary[i], "r");
+//     ps_out = popen(ary[i+1], "w");
+//
+//     while (fgets(stuff, 1024, ps_in))
+//       fputs(stuff, ps_out);
+//     pclose(ps_in);
+//     pclose(ps_out);
+//   }
+//   return 0;
+//
+// }
+
+// int piping(char **ary){
+//   int p[2],tmp;
+//   for(int i = 0; ary[i+1]; i++){
+//     pipe(p);
+//     if(fork()){
+// 				close(p[1]);
+// 				tmp=dup(STDIN_FILENO);
+// 				dup2(p[0],STDIN_FILENO);
+// 				wait(0);
+// 				dup2(tmp,STDIN_FILENO);
+// 				close(p[0]);
+// 		}else{
+// 				close(p[0]);
+// 				tmp=dup(STDOUT_FILENO);
+// 				dup2(p[1],STDOUT_FILENO);
+// 				run_command(ary[i]);
+// 				dup2(tmp,STDOUT_FILENO);
+// 				close(p[1]);
+// 				exit(0);
+// 		}
+//   }
+// }
+
+void redirect_STDIN(char **ary){
+  // int new_file = open(trim(ary[1]), O_CREAT | O_WRONLY, 0666);
+  // if(direction){ // >
+  //   int std_out = dup(1);
+  //   dup2(new_file, 1);
+  //   int f = fork();
+	//   if(f){
+	//     wait(&f);
+	//   }
+	//   else{
+  //     run_command(ary);
+	//   }
+  //  }
+  // else{ // <
+  //  }
 }
 
-int piping(char **ary){
-  char stuff[1024];
-  FILE *ps_in;
-  FILE *ps_out;
-  for(int i = 0; ary[i+1]; i++){
-    ps_in = popen(ary[i], "r");
-    ps_out = popen(ary[i+1], "w");
+void redirect_STDOUT(char *ary){
+  char** args = parse_args(ary, '>');
+  char** cmds;
+  int std_out = dup(STDOUT_FILENO);
+  int switcheroo = 1;
+  for(int i = 0; args[i+1]; i++){
+    int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
+    printf("%s\n", trim(args[i+1]));
+    switcheroo = dup2(new_file, switcheroo);
+    int f = fork();
+    if(f){
+	    wait(&f);
+	  }
+	  else{
+      cmds = parse_args(args[i], ' ');
+      run_command(cmds);
+	  }
 
-    while (fgets(stuff, 1024, ps_in))
-      fputs(stuff, ps_out);
-    pclose(ps_in);
-    pclose(ps_out);
   }
-  return 0;
-
+  dup2(std_out, switcheroo);
+  free(args);
 }
-
 
 int run_multiple_cmd(char **ary){
   char** argy;
   for(int i = 0; ary[i]; i++){
     if(check_char_cmd(ary[i], '>')){
-      argy = parse_args(ary[i], '>');
-      run_redirection(argy, 1);
+      redirect_STDOUT(ary[i]);
+      //run_redirection(argy, 1);
     }
     else if(check_char_cmd(ary[i], '<')){
       argy = parse_args(ary[i], '<');
-      run_redirection(argy, 0);
+      //run_redirection(argy, 0);
+    }
+    else if(check_char_cmd(ary[i], '>')){
+      argy = parse_args(ary[i], '>');
+      //run_redirection(argy, 0);
     }
     else if(check_char_cmd(ary[i], '|')){
       argy = parse_args(ary[i], '|');
-      piping(argy);
+      //piping(argy);
 
     }
 
