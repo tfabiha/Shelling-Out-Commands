@@ -98,47 +98,6 @@ void run_command_custom(char **ary, int fd){
   exit(EXIT_SUCCESS);
 }
 
-
-// int piping(char **ary){
-//   char stuff[1024];
-//   FILE *ps_in;
-//   FILE *ps_out;
-//   for(int i = 0; ary[i+1]; i++){
-//     ps_in = popen(ary[i], "r");
-//     ps_out = popen(ary[i+1], "w");
-//
-//     while (fgets(stuff, 1024, ps_in))
-//       fputs(stuff, ps_out);
-//     pclose(ps_in);
-//     pclose(ps_out);
-//   }
-//   return 0;
-//
-// }
-
-// int piping(char **ary){
-//   int p[2],tmp;
-//   for(int i = 0; ary[i+1]; i++){
-//     pipe(p);
-//     if(fork()){
-// 				close(p[1]);
-// 				tmp=dup(STDIN_FILENO);
-// 				dup2(p[0],STDIN_FILENO);
-// 				wait(0);
-// 				dup2(tmp,STDIN_FILENO);
-// 				close(p[0]);
-// 		}else{
-// 				close(p[0]);
-// 				tmp=dup(STDOUT_FILENO);
-// 				dup2(p[1],STDOUT_FILENO);
-// 				run_command(ary[i]);
-// 				dup2(tmp,STDOUT_FILENO);
-// 				close(p[1]);
-// 				exit(0);
-// 		}
-//   }
-// }
-
 void redirect_STDIN(char *ary){
   char** args = parse_args(ary, '<');
   char** cmds;
@@ -148,12 +107,6 @@ void redirect_STDIN(char *ary){
     char * filename = trim(args[i]);
     int read_file = open(filename, O_RDONLY);
     switcheroo = dup2(read_file, switcheroo);
-
-    // struct stat file;
-    // stat(filename, &file);
-    // int size = file.st_size;
-    // printf("%d\n", size);
-    // write(read_file, stdin, size);
 
     int f = fork();
     if(f){
@@ -224,10 +177,6 @@ int run_multiple_cmd(char **ary){
     }
     else if(check_char_cmd(ary[i], '<')){
       redirect_STDIN(ary[i]);
-      //run_redirection(argy, 0);
-    }
-    else if(check_char_cmd(ary[i], '>')){
-      argy = parse_args(ary[i], '>');
       //run_redirection(argy, 0);
     }
     else if(check_char_cmd(ary[i], '|')){
