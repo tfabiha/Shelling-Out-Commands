@@ -87,6 +87,17 @@ void run_command(char **ary){
   exit(EXIT_SUCCESS);
 }
 
+void run_command_custom(char **ary, int fd){
+
+  execvp(ary[0], ary);
+  if(strcmp(ary[0], "")){
+    dup2(fd, 1);
+    printf("%s: command not found\n", ary[0]);
+  }
+  exit(EXIT_SUCCESS);
+}
+
+
 // int piping(char **ary){
 //   char stuff[1024];
 //   FILE *ps_in;
@@ -127,32 +138,15 @@ void run_command(char **ary){
 //   }
 // }
 
-void redirect_STDIN(char **ary){
-  // int new_file = open(trim(ary[1]), O_CREAT | O_WRONLY, 0666);
-  // if(direction){ // >
-  //   int std_out = dup(1);
-  //   dup2(new_file, 1);
-  //   int f = fork();
-	//   if(f){
-	//     wait(&f);
-	//   }
-	//   else{
-  //     run_command(ary);
-	//   }
-  //  }
-  // else{ // <
-  //  }
-}
-
-void redirect_STDOUT(char *ary){
-  char** args = parse_args(ary, '>');
+void redirect_STDIN(char *ary){
+  char** args = parse_args(ary, '<');
   char** cmds;
-  int std_out = dup(STDOUT_FILENO);
+  int std_out = dup(STDIN_FILENO);
   int switcheroo = 1;
   for(int i = 0; args[i+1]; i++){
     int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
-    printf("%s\n", trim(args[i+1]));
     switcheroo = dup2(new_file, switcheroo);
+
     int f = fork();
     if(f){
 	    wait(&f);
@@ -162,6 +156,41 @@ void redirect_STDOUT(char *ary){
       run_command(cmds);
 	  }
 
+      //file = open(trim(args[i]), O_RDONLY);
+    }
+  dup2(std_out, switcheroo);
+  free(args);
+}
+
+void redirect_STDOUT(char *ary){
+  char** args = parse_args(ary, '>');
+  char** cmds;
+  int std_out = dup(STDOUT_FILENO);
+  int switcheroo = 1;
+  for(int i = 0; args[i+1]; i++){
+    int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
+    switcheroo = dup2(new_file, switcheroo);
+
+    if(i < 1){
+      int f = fork();
+      if(f){
+  	    wait(&f);
+  	  }
+  	  else{
+        cmds = parse_args(args[i], ' ');
+        run_command_custom(cmds, std_out);
+  	  }
+    }
+    else{
+      //int c;
+        dup2(std_out, 1);
+        int read_file = open(trim(args[i]), O_RDONLY, 0664);
+        //printf("hi\n", trim(args[i]));
+        char store[1024];
+        read(read_file, store, sizeof(store));
+        write(new_file, store, sizeof(store));
+        open(trim(args[i+1]), O_CREAT, 0664);
+      }
   }
   dup2(std_out, switcheroo);
   free(args);

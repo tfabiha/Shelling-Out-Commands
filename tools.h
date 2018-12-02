@@ -11,6 +11,10 @@ char* trim(char *str);
 
 void run_command(char **ary);
 
+void run_command_custom(char **ary, int fd);
+
+void redirect_STDIN(char *ary);
+
 void redirect_STDOUT(char *ary);
 
 int check_char_cmd(char *ary, char c);
