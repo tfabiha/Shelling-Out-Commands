@@ -307,23 +307,49 @@ void redirect_STDOUT(char *ary){
 
 
 void redirect_pipes(char* ary){
-  char **args = parse_args(ary, " ");
+  char **args = parse_args(ary, ' ');
   char **res = parse_args_custom(args);
+  free(args);
 
 }
 
-char** parse_args_custom(char** line){
+char** parse_args_custom(char** args){
   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
 
-  char** args = calloc(sizeof(line)/sizeof(char*), sizeof(char*)); //Might need to edit 256
-
+  char** n_args = calloc(sizeof(args)/sizeof(char*), sizeof(char*)); //Might need to edit 256
+  int count = 0;
+  char* arg = calloc(sizeof(args[0]), sizeof(char));
+  
   for(int i = 0; args[i]; i++){
-      if()
-  }
 
-  return args;
+      if(strcmp(args[i], ">")==0){
+        char* arg = calloc(sizeof(args[i]), sizeof(char));
+        arg = "";
+
+        while(strcmp(args[i], ">") != 0  &&  strcmp(args[i], "<") != 0 && args[i]){
+          printf("%s\n", arg);
+          int size = strlen(args[i]) + strlen(arg) + 1;
+          arg = realloc(arg, size);
+          strcat(arg, args[i]);
+          arg = realloc(arg, size);
+          i++;
+        }
+        printf("%s\n", args[i]);
+      }
+      else if(strcmp(args[i], "<")){
+
+      }
+      else{
+
+      }
+      // if(strcmp(args[i], ">")){
+      //
+      // }
+  }
+  free(args);
+  return n_args;
 }
 
 
@@ -331,7 +357,8 @@ int run_multiple_cmd(char **ary){
   char** argy;
   for(int i = 0; ary[i]; i++){
     if(check_char_cmd(ary[i], '>')){
-      redirect_STDOUT(ary[i]);
+      //redirect_STDOUT(ary[i]);
+      redirect_pipes(ary[i]);
       //run_redirection(argy, 1);
     }
     else if(check_char_cmd(ary[i], '<')){
