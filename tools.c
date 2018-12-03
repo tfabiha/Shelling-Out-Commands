@@ -121,29 +121,111 @@ void run_command_custom(char **ary, int fd){
 
 void piping(char *ary){
   char** args = parse_args(ary, '|');
-  int fds[2], s;
 
-  for(int i = 0; args[i]; i++){
-    pipe(fds);
+  int count = 0;
 
-    int f = fork();
-    if(f){
-      wait(&f);
-      close(fds[1]);
-      s = dup(STDIN_FILENO);
-      dup2(STDOUT_FILENO, STDIN_FILENO);
-
-		}
-    else{
-      close(fds[0]);
-      dup2(fds[1], STDOUT_FILENO);
-      char** _args = parse_args(args[i], ' ');
-      run_command(_args)
-      free(_args);
-      close(fds[1]);
-		}
+  for (int i = 0; args[i]; i++)
+  {
+    count++;
   }
-  free(args);
+
+  int s;
+  int * fd[count];
+
+  for (int i = 0; i < count; i++)
+  {
+    fd[i] = (int *) malloc(2 * sizeof(int));
+    pipe(fd[i]);
+  }
+
+
+  for (int i = 0; i < count; i++)
+  {
+    if (i == 0)
+    {
+      int f = fork();
+
+      if (f)
+      {
+        wait(&f);
+      }
+      else
+      {
+        dup2(fd[i][1], STDOUT_FILENO);
+        close(fd[i][0]);
+
+        char** _args = parse_args(args[i], ' ');
+        run_command(_args);
+        free(_args);
+      }
+    }
+    else if (i == count - 1)
+    {
+      int f = fork();
+
+      if (f)
+      {
+        wait(&f);
+      }
+      else
+      {
+        dup2(fd[i-1][0], STDIN_FILENO);
+        close(fd[i-1][1]);
+
+        char** _args = parse_args(args[i], ' ');
+        run_command(_args);
+        free(_args);
+      }
+    }
+    else
+    {
+      int f = fork();
+
+      if (f)
+      {
+        wait(&f);
+      }
+      else
+      {
+        dup2(fd[i-1][0], STDIN_FILENO);
+        close(fd[i-1][1]);
+
+        dup2(fd[i][1], STDOUT_FILENO);
+        close(fd[i][0]);
+
+        char** _args = parse_args(args[i], ' ');
+        run_command(_args);
+        free(_args);
+      }
+    }
+
+  }
+
+  // for(int i = 0; args[i]; i++){
+  //   pipe(fds);
+  //
+  //   int f = fork();
+  //
+  //   printf("%s\n", "i got to here");
+  //   if(f){
+  //     wait(&f);
+  //     close(fds[1]);
+  //     s = dup(STDIN_FILENO);
+  //     dup2(STDOUT_FILENO, STDIN_FILENO);
+  //
+	// 	}
+  //   else{
+  //     printf("%s\n", "Im a child");
+  //     close(fds[0]);
+  //     dup2(fds[1], STDOUT_FILENO);
+  //
+  //     char** _args = parse_args(args[i], ' ');
+  //     run_command(_args);
+  //     free(_args);
+  //     close(fds[1]);
+	// 	}
+  // }
+  // free(args);
 }
 
 void redirect_STDIN(char *ary){
