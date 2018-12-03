@@ -80,8 +80,9 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
-
+  printf("I am at my last");
   execvp(ary[0], ary);
+
   if(strcmp(ary[0], "")){
     printf("%s: command not found\n", ary[0]);
   }
@@ -89,7 +90,6 @@ void run_command(char **ary){
 }
 
 void run_command_custom(char **ary, int fd){
-
   execvp(ary[0], ary);
   if(strcmp(ary[0], "")){
     dup2(fd, 1);
@@ -98,26 +98,6 @@ void run_command_custom(char **ary, int fd){
   exit(EXIT_SUCCESS);
 }
 
-// void piping(char *ary){
-//   char** args = parse_args(ary, '|');
-//
-//   int fds[2], std_in, std_out;
-//
-//   pipe(fds);
-//   for(int i = 0; args[i + 1]; i++){
-//     int f = fork();
-//     if(f){
-//       wait(&f);
-//
-//     }
-//     else{
-//       char** argss = parse_args(args[i], ' ');
-//       run_command(argss);
-//       free(argss);
-//     }
-//   }
-//   free(args);
-// }
 
 void piping(char *ary){
   char** args = parse_args(ary, '|');
@@ -131,6 +111,7 @@ void piping(char *ary){
 
   int s;
   int * fd[count];
+  printf("Count: %d\n", count);
 
   for (int i = 0; i < count; i++)
   {
@@ -161,6 +142,7 @@ void piping(char *ary){
     }
     else if (i == count - 1)
     {
+      printf("I am at my last point\n");
       int f = fork();
 
       if (f)
@@ -169,12 +151,15 @@ void piping(char *ary){
       }
       else
       {
+	printf("I am the child\n");
         dup2(fd[i-1][0], STDIN_FILENO);
         close(fd[i-1][1]);
 
         char** _args = parse_args(args[i], ' ');
-        run_command(_args);
+	run_command(_args);
         free(_args);
+
+	exit(EXIT_SUCCESS);
       }
     }
     else
