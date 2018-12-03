@@ -81,7 +81,6 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
-  printf("I am at my last");
   execvp(ary[0], ary);
 
   if(strcmp(ary[0], "")){

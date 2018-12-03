@@ -1,4 +1,0 @@
- 10:32:29 up  1:13,  1 user,  load average: 0.61, 0.64, 1.01
-USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
-izhang1  :0       :0               10:01   ?xdm?   1:45   0.01s /usr/lib/gdm3/gdm-x-session --run-script env GNOME_SHELL_SESSION_MODE=ubuntu gnome-session --session=ubuntu
-

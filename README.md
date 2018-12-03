@@ -60,9 +60,7 @@ tools.c Handles all commands entered into the shell
 
 	Uses sizeof to determine the number of *char in ary
 	====================*/
-	
-parse.c Handles all line parsing functions
-	
+
 	/*======== char* trim() ==========
 	Inputs:  char *str
 
@@ -119,15 +117,26 @@ parse.c Handles all line parsing functions
 	Checks to see if c exists in ary.
 	====================*/
 
-	/*======== int check_char_cmd() ==========
-	Inputs:  char *ary, char c
-	Returns: 1 if c is found, 0 if c is not found
+	/*======== void piping() ==========
+	Inputs:  char *ary
+	Returns: Doesn't return anything :)
 
-	Checks to see if c exists in ary.
+	Handles and runs command line input that contains |.
 	====================*/
 	
-dwsh.c
-	Handles the forking an executing of commands...
+dojo.c
+	/*======== static void sighandler() ==========
+	Inputs:  int signo
+	Returns: Doesn't return anything :)
 
-magical.c
-	UNOCORNS!
+	Handle SIGNALS
+	====================*/
+
+	/*======== int main() ==========
+	Inputs:  int argc, char *argv
+	Returns: Returns 0 if completed
+
+	Prints colorful and custom commands line prompt (with current working directory).
+	If there is an error, catches and exits out of program.
+	Executes the command that the user inputs.
+	====================*/

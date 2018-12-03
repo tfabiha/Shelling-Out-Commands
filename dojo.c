@@ -32,6 +32,7 @@ int main(int argc, char **argv){
     if (fgets(cmds, 60, stdin) == NULL)
     {
       printf("Error has been found. Exiting.\n");
+      exit(EXIT_FAILURE);
     }
     else
     {
