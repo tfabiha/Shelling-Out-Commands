@@ -16,7 +16,8 @@ char** parse_args(char* line, char c){
   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
-  char** args = calloc(256, sizeof(char**)); //Might need to edit 256
+  size_t size = strlen(line);
+  char** args = calloc(size, sizeof(char*)); //Might need to edit 256
   int i = 0;
 
   if(check_char_cmd(line, c)){
@@ -232,8 +233,13 @@ void piping(char *ary){
 void redirect_STDIN(char *ary){
   char** args = parse_args(ary, '<');
   char** cmds;
+  if(args[0]){
+    cmds = parse_args(args[0], ' ');
+    printf("%s\n", cmds[0]);
+  }
   int std_in = dup(STDIN_FILENO);
   int switcheroo = 0;
+
   for(int i = 1; args[i]; i++){
     char * filename = trim(args[i]);
     int read_file = open(filename, O_RDONLY);
@@ -244,13 +250,11 @@ void redirect_STDIN(char *ary){
 	    wait(&f);
 	  }
 	  else{
-      cmds = parse_args(args[0], ' ');
       run_command(cmds);
-      free(cmds);
 	  }
 
-      //file = open(trim(args[i]), O_RDONLY);
     }
+  free(cmds);
   dup2(std_in, 0);
   free(args);
 }
@@ -303,7 +307,23 @@ void redirect_STDOUT(char *ary){
 
 
 void redirect_pipes(char* ary){
-  
+  char **args = parse_args(ary, " ");
+  char **res = parse_args_custom(args);
+
+}
+
+char** parse_args_custom(char** line){
+  // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
+  // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
+  // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
+
+  char** args = calloc(sizeof(line)/sizeof(char*), sizeof(char*)); //Might need to edit 256
+
+  for(int i = 0; args[i]; i++){
+      if()
+  }
+
+  return args;
 }
 
 
@@ -337,6 +357,7 @@ int run_multiple_cmd(char **ary){
       if (strcmp(argy[0], "cd") == 0)
       {
         chdir(argy[1]);
+
     }
     else
     {
