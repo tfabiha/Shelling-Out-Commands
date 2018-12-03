@@ -17,6 +17,8 @@ void redirect_STDIN(char *ary);
 
 void redirect_STDOUT(char *ary);
 
+void redirect_pipes(char* ary);
+
 int check_char_cmd(char *ary, char c);
 
 void piping(char *ary);

@@ -201,6 +201,7 @@ void piping(char *ary){
 
   }
 
+  //
   // for(int i = 0; args[i]; i++){
   //   pipe(fds);
   //
@@ -299,6 +300,12 @@ void redirect_STDOUT(char *ary){
   dup2(std_out, switcheroo);
   free(args);
 }
+
+
+void redirect_pipes(char* ary){
+  
+}
+
 
 int run_multiple_cmd(char **ary){
   char** argy;

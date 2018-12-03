@@ -4,6 +4,7 @@ ls -a -l
 echo CD TEST
 cd ..
 pwd
+cd dojo
 echo SEMICOLON TEST
 ps ; echo HELLO
 echo STDOUT REDIRECT TEST
