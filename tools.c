@@ -37,14 +37,14 @@ char* trim(char *str){
   char * orig = str;
 
   while(*orig=='\n' || *orig==' '){
-   orig++;
+    orig++;
   }
 
   str = str + size - 1;
 
   while(*str=='\n' || *str==' '){
-   *str = '\0';
-   str-=1;
+    *str = '\0';
+    str-=1;
   }
 
   char * new_str = malloc(size);
@@ -55,25 +55,25 @@ char* trim(char *str){
 
 
   while (*point_org)
-  {
-    //printf("Got here!\n");
-    if (*point_org == ' ' && space_counter)
     {
-      point_org++;
+      //printf("Got here!\n");
+      if (*point_org == ' ' && space_counter)
+	{
+	  point_org++;
+	}
+      else
+	{
+	  space_counter = *point_org == ' ';
+
+	  if(new_str[str_count] != ' '){
+	    new_str[str_count] = *point_org;
+
+	  }
+	  point_org++;
+	  str_count++;
+	}
+
     }
-    else
-    {
-      space_counter = *point_org == ' ';
-
-      if(new_str[str_count] != ' '){
-        new_str[str_count] = *point_org;
-
-      }
-      point_org++;
-      str_count++;
-    }
-
-  }
 
   new_str[str_count] = '\0';
 
@@ -81,8 +81,9 @@ char* trim(char *str){
 }
 
 void run_command(char **ary){
-
+  printf("I am at my last");
   execvp(ary[0], ary);
+
   if(strcmp(ary[0], "")){
     printf("%s: command not found\n", ary[0]);
   }
@@ -90,7 +91,6 @@ void run_command(char **ary){
 }
 
 void run_command_custom(char **ary, int fd){
-
   execvp(ary[0], ary);
   if(strcmp(ary[0], "")){
     dup2(fd, 1);
@@ -99,108 +99,115 @@ void run_command_custom(char **ary, int fd){
   exit(EXIT_SUCCESS);
 }
 
-// void piping(char *ary){
-//   char** args = parse_args(ary, '|');
-//
-//   int fds[2], std_in, std_out;
-//
-//   pipe(fds);
-//   for(int i = 0; args[i + 1]; i++){
-//     int f = fork();
-//     if(f){
-//       wait(&f);
-//
-//     }
-//     else{
-//       char** argss = parse_args(args[i], ' ');
-//       run_command(argss);
-//       free(argss);
-//     }
-//   }
-//   free(args);
-// }
 
 void piping(char *ary){
   char** args = parse_args(ary, '|');
 
   int count = 0;
 
+  int reg_in = dup(STDIN_FILENO);
+  int reg_out = dup(STDOUT_FILENO);
+
   for (int i = 0; args[i]; i++)
-  {
-    count++;
-  }
+    {
+      count++;
+    }
 
-  int s;
   int * fd[count];
+  //printf("Count: %d\n", count);
 
   for (int i = 0; i < count; i++)
-  {
-    fd[i] = (int *) malloc(2 * sizeof(int));
-    pipe(fd[i]);
-  }
-
-
-  for (int i = 0; i < count; i++)
-  {
-    if (i == 0)
     {
-      int f = fork();
-
-      if (f)
-      {
-        wait(&f);
-      }
-      else
-      {
-        dup2(fd[i][1], STDOUT_FILENO);
-        close(fd[i][0]);
-
-        char** _args = parse_args(args[i], ' ');
-        run_command(_args);
-        free(_args);
-      }
-    }
-    else if (i == count - 1)
-    {
-      int f = fork();
-
-      if (f)
-      {
-        wait(&f);
-      }
-      else
-      {
-        dup2(fd[i-1][0], STDIN_FILENO);
-        close(fd[i-1][1]);
-
-        char** _args = parse_args(args[i], ' ');
-        run_command(_args);
-        free(_args);
-      }
-    }
-    else
-    {
-      int f = fork();
-
-      if (f)
-      {
-        wait(&f);
-      }
-      else
-      {
-        dup2(fd[i-1][0], STDIN_FILENO);
-        close(fd[i-1][1]);
-
-        dup2(fd[i][1], STDOUT_FILENO);
-        close(fd[i][0]);
-
-        char** _args = parse_args(args[i], ' ');
-        run_command(_args);
-        free(_args);
-      }
+      fd[i] = (int *) malloc(2 * sizeof(int));
+      pipe(fd[i]);
     }
 
-  }
+  FILE * input;
+  FILE * output;
+  char buffer[256];
+
+  output = popen(args[0], "r");
+  input = popen(args[1], "w");
+
+  while(fgets(buffer, 256, output))
+    {
+      fputs(buffer, input);
+    }
+
+  pclose(output);
+  pclose(input);
+  
+
+  /* for (int i = 0; i < count; i++) */
+  /*   { */
+  /*     if (i == 0) */
+  /* 	{ */
+  /* 	  int f = fork(); */
+
+  /* 	  if (f) */
+  /* 	    { */
+  /* 	      wait(&f); */
+  /* 	    } */
+  /* 	  else */
+  /* 	    { */
+  /* 	      dup2(fd[i][1], STDOUT_FILENO); */
+  /* 	      close(fd[i][0]); */
+
+  /* 	      char** _args = parse_args(args[i], ' '); */
+  /* 	      run_command(_args); */
+  /* 	      free(_args); */
+  /* 	    } */
+  /* 	} */
+  /*     else if (i == count - 1) */
+  /* 	{ */
+  /* 	  printf("I am at my last point\n"); */
+  /* 	  int f = fork(); */
+
+  /* 	  if (f) */
+  /* 	    { */
+  /* 	      wait(&f); */
+  /* 	    } */
+  /* 	  else */
+  /* 	    { */
+  /* 	      printf("I am the child\n"); */
+  /* 	      dup2(fd[i-1][0], STDIN_FILENO); */
+  /* 	      close(fd[i-1][1]); */
+
+  /* 	      char** _args = parse_args(args[i], ' '); */
+  /* 	      run_command(_args); */
+  /* 	      free(_args); */
+
+  /* 	      exit(EXIT_SUCCESS); */
+  /* 	    } */
+  /* 	} */
+  /*     else */
+  /* 	{ */
+  /* 	  int f = fork(); */
+
+  /* 	  if (f) */
+  /* 	    { */
+  /* 	      wait(&f); */
+  /* 	    } */
+  /* 	  else */
+  /* 	    { */
+  /* 	      dup2(fd[i-1][0], STDIN_FILENO); */
+  /* 	      close(fd[i-1][1]); */
+
+  /* 	      dup2(fd[i][1], STDOUT_FILENO); */
+  /* 	      close(fd[i][0]); */
+
+  /* 	      char** _args = parse_args(args[i], ' '); */
+  /* 	      run_command(_args); */
+  /* 	      free(_args); */
+  /* 	    } */
+  /* 	} */
+  /*   } */
+
+  /* dup2(reg_out, STDOUT_FILENO); */
+  /* dup2(reg_in, STDIN_FILENO); */
+
+  /* printf("It got to the end. It's working.\n");
+ */
 
   //
   // for(int i = 0; args[i]; i++){
@@ -215,7 +222,7 @@ void piping(char *ary){
   //     s = dup(STDIN_FILENO);
   //     dup2(STDOUT_FILENO, STDIN_FILENO);
   //
-	// 	}
+  // 	}
   //   else{
   //     printf("%s\n", "Im a child");
   //     close(fds[0]);
@@ -225,7 +232,7 @@ void piping(char *ary){
   //     run_command(_args);
   //     free(_args);
   //     close(fds[1]);
-	// 	}
+  // 	}
   // }
   // free(args);
 }
@@ -247,13 +254,13 @@ void redirect_STDIN(char *ary){
 
     int f = fork();
     if(f){
-	    wait(&f);
-	  }
-	  else{
-      run_command(cmds);
-	  }
-
+      wait(&f);
     }
+    else{
+      run_command(cmds);
+    }
+
+  }
   free(cmds);
   dup2(std_in, 0);
   free(args);
@@ -272,34 +279,34 @@ void redirect_STDOUT(char *ary){
     if(i < 1){
       int f = fork();
       if(f){
-  	    wait(&f);
-  	  }
-  	  else{
+	wait(&f);
+      }
+      else{
         cmds = parse_args(args[i], ' ');
         run_command_custom(cmds, std_out);
         free(cmds);
-  	  }
+      }
     }
     else{
       //int c;
-        dup2(std_out, 1);
-        char * filen = trim(args[i]);
-        int read_file = open(filen, O_RDONLY, 0664);
-        //printf("hi\n", trim(args[i]));
-        struct stat file;
-        stat(filen, &file);
-        int size = file.st_size;
-        //printf("%d\n", size);
-        char store[size];
-        read(read_file, store, size);
-        //printf("%s\n", store);
-        write(new_file, store, size);
-        toTrunc = 1;
-      }
+      dup2(std_out, 1);
+      char * filen = trim(args[i]);
+      int read_file = open(filen, O_RDONLY, 0664);
+      //printf("hi\n", trim(args[i]));
+      struct stat file;
+      stat(filen, &file);
+      int size = file.st_size;
+      //printf("%d\n", size);
+      char store[size];
+      read(read_file, store, size);
+      //printf("%s\n", store);
+      write(new_file, store, size);
+      toTrunc = 1;
+    }
     if(toTrunc){
       open(trim(args[i]), O_TRUNC | O_WRONLY, 0664);
     }
-      //open(trim(args[i]), O_TRUNC | O_WRONLY, 0664);
+    //open(trim(args[i]), O_TRUNC | O_WRONLY, 0664);
   }
   dup2(std_out, switcheroo);
   free(args);
@@ -350,6 +357,7 @@ char** parse_args_custom(char** args){
   }
   free(args);
   return n_args;
+
 }
 
 
@@ -374,30 +382,30 @@ int run_multiple_cmd(char **ary){
       argy = parse_args(ary[i], ' ');
 
       if (strcmp(argy[0], "exit") == 0)
-      {
-        printf("exiting\033[0m\n");
-        free(argy);
+	{
+	  printf("exiting\033[0m\n");
+	  free(argy);
 
-        exit(EXIT_SUCCESS);
-      }
+	  exit(EXIT_SUCCESS);
+	}
 
       if (strcmp(argy[0], "cd") == 0)
-      {
-        chdir(argy[1]);
+	{
+	  chdir(argy[1]);
 
-    }
-    else
-    {
-      int f = fork();
-      if(f){
-        wait(&f);
-      }
-      else{
-        run_command(argy);
-      }
-    }
+	}
+      else
+	{
+	  int f = fork();
+	  if(f){
+	    wait(&f);
+	  }
+	  else{
+	    run_command(argy);
+	  }
+	}
 
-    free(argy);
+      free(argy);
     }
 
   }

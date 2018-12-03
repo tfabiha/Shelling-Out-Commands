@@ -7,6 +7,8 @@ char** parse_args(char* line, char c);
 
 char** parse_args_custom(char** args);
 
+char** parse_args_custom(char** line);
+
 int countTokens(char **ary);
 
 char* trim(char *str);
