@@ -44,6 +44,7 @@ tools.c Handles all commands entered into the shell
 	====================*/
 
 	/*======== void parse_args_custom() ==========
+	DOES NOT WORK
 	Inputs:  char **args
 	Returns: Doesn't return anything :)
 
@@ -105,6 +106,7 @@ tools.c Handles all commands entered into the shell
 	====================*/
 
 	/*======== void redirect_pipes() ==========
+	DOES NOT WORK
 	Inputs:  char *ary
 	Returns: Doesn't return anything :)
 
