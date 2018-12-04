@@ -292,7 +292,7 @@ void redirect_STDOUT(char *ary){
     else{
       //int c;
       dup2(std_out, 1);
-      
+
       //printf("hi\n", trim(args[i]));
       struct stat file;
       stat(filen, &file);
@@ -337,7 +337,6 @@ void parse_args_custom(char** args){
           strcat(arg, args[i]);
           i++;
         }
-        printf("%s\n", arg);
         redirect_STDOUT(arg);
         free(arg);
         arg = calloc(1, sizeof(char));
@@ -356,7 +355,6 @@ void parse_args_custom(char** args){
           strcat(arg, args[i]);
           i++;
         }
-        printf("%s\n", arg);
         redirect_STDIN(arg);
         free(arg);
         arg = calloc(1, sizeof(char));
