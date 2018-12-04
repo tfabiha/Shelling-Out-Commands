@@ -274,6 +274,7 @@ void redirect_STDOUT(char *ary){
   for(int i = 0; args[i+1]; i++){
     char * filen = trim(args[i]);
     int read_file = open(filen, O_RDONLY);
+    printf("%s\n", filen);
     int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
     switcheroo = dup2(new_file, switcheroo);
 
