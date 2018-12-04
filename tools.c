@@ -52,13 +52,13 @@ char* trim(char *str){
   size_t size = strlen(str);
   char * orig = str;
 
-  while(*orig=='\n' || *orig==' '){
+  while(*orig=='\n' || *orig==' ' || *orig=='\t'){
     orig++;
   }
 
   str = str + size - 1;
 
-  while(*str=='\n' || *str==' '){
+  while(*str=='\n' || *str==' ' || *str=='\t'){
     *str = '\0';
     str-=1;
   }
@@ -73,15 +73,15 @@ char* trim(char *str){
   while (*point_org)
     {
       //printf("Got here!\n");
-      if (*point_org == ' ' && space_counter)
+      if (*point_org == ' ' && space_counter || *point_org == '\t' && space_counter)
 	{
 	  point_org++;
 	}
       else
 	{
-	  space_counter = *point_org == ' ';
+	  space_counter = *point_org == ' ' || *point_org == '\t';
 
-	  if(new_str[str_count] != ' '){
+	  if(new_str[str_count] != ' ' && new_str[str_count] != '\t'){
 	    new_str[str_count] = *point_org;
 
 	  }
