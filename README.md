@@ -2,11 +2,11 @@ edojo
 by T Fabiha and Ivan Zhang
 
 Features:
-- Forks and executes commands!
+- Forks and executes commands
 - Parses multiple commands on one line!
 - Redirects using >, <!
-- Guaranteed to regrow hair!
-- Can summon a winged unicorn for fast & magical transit!
+- Pipes using |
+- Works even with multiple spaces in between commands
 
 Attempted:
 The following did not end up working, but have been left in the code, commented out.
@@ -20,7 +20,10 @@ Bugs:
 	- ls > ls.txt > l.txt WORKS
 	- sort < one.txt < two.txt < three.txt WORKS
 	- cmd < cmd_file > res DOESN'T WORK
-
+- Does not recognize commands if not separated by at least one space
+  For example:
+  	ls>foo.txt //will not work
+	ls > foo.txt //will work
 
 Files & Function Headers:
 
@@ -58,7 +61,7 @@ tools.c Handles all commands entered into the shell
 	Organizes and executes commands based on the type (>,<,|) in the statement.
 	====================*/
 
-	/*======== int count_tokens() ==========
+	/*======== int countTokens() ==========
 	Inputs:  char **ary
 	Returns: Number of *char in ary
 
@@ -126,7 +129,8 @@ tools.c Handles all commands entered into the shell
 	Inputs:  char *ary
 	Returns: Doesn't return anything :)
 
-	Handles and runs command line input that contains |.
+	Handles and runs command line input that contains |. Only works
+	with a single pipe.
 	====================*/
 
 dojo.c
