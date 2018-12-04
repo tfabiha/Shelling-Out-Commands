@@ -7,6 +7,7 @@ Features:
 - Redirects using >, <!
 - Pipes using |
 - Works even with multiple spaces in between items
+- Shell shows current working directory
 
 Attempted:
 The following did not end up working, but have been left in the code, commented out.
