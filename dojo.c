@@ -8,11 +8,25 @@
 
 #include "tools.h"
 
+/*======== static void sighandler() ==========
+	Inputs:  int signo
+	Returns: Doesn't return anything :)
+
+	Handle SIGNALS
+	====================*/
 static void sighandler(int signo)
 {
 
 }
 
+/*======== int main() ==========
+	Inputs:  int argc, char *argv
+	Returns: Returns 0 if completed
+
+	Prints colorful and custom commands line prompt (with current working directory).
+	If there is an error, catches and exits out of program.
+	Executes the command that the user inputs.
+	====================*/
 int main(int argc, char **argv){
 
   while(1)

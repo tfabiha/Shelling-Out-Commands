@@ -10,6 +10,14 @@
 
 #include "tools.h"
 
+/*======== char** parse_args() ==========
+Inputs:  char *line, char c
+Returns: Array of strings where each entry is a token
+separated by c
+
+If line contains multiple tokens separated by c, this
+function will put each token into an array of strings
+====================*/
 char** parse_args(char* line, char c){
   //printf("%s, %c\n", line, c);
   line = trim(line);
@@ -32,6 +40,14 @@ char** parse_args(char* line, char c){
   return args;
 }
 
+/*======== char* trim() ==========
+Inputs:  char *str
+
+Returns: String that is trimmed of all extraneous spaces
+
+Removes all extra spaces, newlines, and tabs in the front, end,
+and in between commands
+====================*/
 char* trim(char *str){
   size_t size = strlen(str);
   char * orig = str;
@@ -80,6 +96,13 @@ char* trim(char *str){
   return new_str;
 }
 
+/*======== void run_command() ==========
+Inputs:  char **ary
+Returns: Doesn't return anything :)
+
+Runs the command in ary.
+Checks to see if command exits.
+====================*/
 void run_command(char **ary){
   execvp(ary[0], ary);
 
@@ -89,6 +112,13 @@ void run_command(char **ary){
   exit(EXIT_SUCCESS);
 }
 
+/*======== void run_command_custom() ==========
+Inputs:  char **ary, int fd
+Returns: Doesn't return anything :)
+
+Same as run_command() except when the command is not found,
+fd(STDOUT) is moved to 1.
+====================*/
 void run_command_custom(char **ary, int fd){
   execvp(ary[0], ary);
   if(strcmp(ary[0], "")){
@@ -98,7 +128,13 @@ void run_command_custom(char **ary, int fd){
   exit(EXIT_SUCCESS);
 }
 
+/*======== void piping() ==========
+Inputs:  char *ary
+Returns: Doesn't return anything :)
 
+Handles and runs command line input that contains |. Only works
+with a single pipe.
+====================*/
 void piping(char *ary){
   char** args = parse_args(ary, '|');
 
@@ -236,6 +272,13 @@ void piping(char *ary){
   // free(args);
 }
 
+/*======== void redirect_STDIN() ==========
+Inputs:  char *ary
+Returns: Doesn't return anything :)
+
+Parses and executes STDIN command given in ary.
+Example: ary ==> "ls > ls.txt" or "ls > ls.txt > l.txt"
+====================*/
 void redirect_STDIN(char *ary){
   char** args = parse_args(ary, '<');
   char** cmds;
@@ -265,6 +308,13 @@ void redirect_STDIN(char *ary){
   free(args);
 }
 
+/*======== void redirect_STDOUT() ==========
+Inputs:  char *ary
+Returns: Doesn't return anything :)
+
+Parses and executes STDOUT command given in ary.
+Example: ary ==> "ls < ls.txt" or "ls < ls.txt < l.txt"
+====================*/
 void redirect_STDOUT(char *ary){
   char** args = parse_args(ary, '>');
   char** cmds;
@@ -313,12 +363,32 @@ void redirect_STDOUT(char *ary){
   free(args);
 }
 
+/*======== void redirect_pipes() ==========
+DOES NOT WORK
+Inputs:  char *ary
+Returns: Doesn't return anything :)
 
+Handles and runs command line input that contains >, <, |.
+Example: ary ==> "ls | wc > l.txt"
+====================*/
 // void redirect_pipes(char* ary){
 //   char **args = parse_args(ary, ' ');
 //   parse_args_custom(args);
 // }
 
+/*======== void parse_args_custom() ==========
+DOES NOT WORK
+Inputs:  char **args
+Returns: Doesn't return anything :)
+
+Generates an array of strings where each entry contains the same sign
+(i.e. >, <, |). Example: "tr a-z A-Z < wholist > foo"
+==> args: ["tr", "a-z", "A-z", "<", "wholist", ">", "foo"]
+==> ['tr a-z A-z < wholist', 'wholist > foo']
+If args contains multiple different signs (<, >, |), this fuction puts
+statements with the same sign together (i.e l > l > l, l | l | l, etc.).
+Organizes and executes commands based on the type (>,<,|) in the statement.
+====================*/
 // void parse_args_custom(char** args){
 //   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
 //   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
@@ -376,7 +446,14 @@ void redirect_STDOUT(char *ary){
 //   free(args);
 // }
 
+/*======== int run_multiple_cmd() ==========
+Inputs:  char **ary
+Returns: 0 after all commands are run
 
+Goes through ary and runs each commands
+Determines what to run based what is in the commands (i.e. <, >, |)
+Checks to see if command is 'exit' or 'cd' and executes it accordingly
+====================*/
 int run_multiple_cmd(char **ary){
   char** argy;
   for(int i = 0; ary[i]; i++){
@@ -428,12 +505,24 @@ int run_multiple_cmd(char **ary){
   return 0;
 }
 
+/*======== int countTokens() ==========
+Inputs:  char **ary
+Returns: Number of *char in ary
+
+Uses sizeof to determine the number of *char in ary
+====================*/
 int countTokens(char **ary){ //a_a_a where _ is a space returns 3. a_a_a_ returns 4
   int i = sizeof(ary)/sizeof(ary[0]);
 
   return i;
 }
 
+/*======== int check_char_cmd() ==========
+Inputs:  char *ary, char c
+Returns: 1 if c is found, 0 if c is not found
+
+Checks to see if c exists in ary.
+====================*/
 int check_char_cmd(char *ary, char c){ //Returns 1 (True) if c in ary, else 0 (False)
   while(*ary){
     if(*ary == c){
