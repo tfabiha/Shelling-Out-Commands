@@ -135,7 +135,7 @@ void piping(char *ary){
 
   pclose(output);
   pclose(input);
-  
+
 
   /* for (int i = 0; i < count; i++) */
   /*   { */
@@ -241,7 +241,7 @@ void redirect_STDIN(char *ary){
   char** cmds;
   if(args[0]){
     cmds = parse_args(args[0], ' ');
-    printf("%s\n", cmds[0]);
+    //printf("%s\n", cmds[0]);
   }
   int std_in = dup(STDIN_FILENO);
   int switcheroo = 0;
@@ -272,13 +272,16 @@ void redirect_STDOUT(char *ary){
   int switcheroo = 1;
   int toTrunc = 0;
   for(int i = 0; args[i+1]; i++){
+    char * filen = trim(args[i]);
+    int read_file = open(filen, O_RDONLY, 0664);
     int new_file = open(trim(args[i+1]), O_CREAT | O_WRONLY, 0664);
     switcheroo = dup2(new_file, switcheroo);
 
-    if(i < 1){
+    //printf("%d\n", read_file);
+    if(i < 1 && !(read_file+1)){
       int f = fork();
       if(f){
-	wait(&f);
+	      wait(&f);
       }
       else{
         cmds = parse_args(args[i], ' ');
@@ -289,8 +292,7 @@ void redirect_STDOUT(char *ary){
     else{
       //int c;
       dup2(std_out, 1);
-      char * filen = trim(args[i]);
-      int read_file = open(filen, O_RDONLY, 0664);
+      
       //printf("hi\n", trim(args[i]));
       struct stat file;
       stat(filen, &file);
@@ -314,49 +316,66 @@ void redirect_STDOUT(char *ary){
 
 void redirect_pipes(char* ary){
   char **args = parse_args(ary, ' ');
-  char **res = parse_args_custom(args);
-  free(args);
-
+  parse_args_custom(args);
 }
 
-char** parse_args_custom(char** args){
+void parse_args_custom(char** args){
   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
 
-  char** n_args = calloc(sizeof(args)/sizeof(char*), sizeof(char*)); //Might need to edit 256
-  int count = 0;
-  char* arg = calloc(sizeof(args[0]), sizeof(char));
-  
+  char* arg = calloc(1, sizeof(char));
+
   for(int i = 0; args[i]; i++){
 
       if(strcmp(args[i], ">")==0){
-        char* arg = calloc(sizeof(args[i]), sizeof(char));
-        arg = "";
 
-        while(strcmp(args[i], ">") != 0  &&  strcmp(args[i], "<") != 0 && args[i]){
-          printf("%s\n", arg);
-          int size = strlen(args[i]) + strlen(arg) + 1;
+        while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], "<") != 0){
+          strcat(arg, " ");
+          int size = strlen(args[i]) + strlen(arg);
           arg = realloc(arg, size);
           strcat(arg, args[i]);
-          arg = realloc(arg, size);
           i++;
         }
-        printf("%s\n", args[i]);
+        printf("%s\n", arg);
+        redirect_STDOUT(arg);
+        free(arg);
+        arg = calloc(1, sizeof(char));
+        if(args[i]){
+          //printf("%s\n", arg);
+          i-=2;
+          //printf("%d\n", i);
+        }
       }
-      else if(strcmp(args[i], "<")){
+      else if(strcmp(args[i], "<") == 0){
 
+        while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], ">") != 0){
+          strcat(arg, " ");
+          int size = strlen(args[i]) + strlen(arg);
+          arg = realloc(arg, size);
+          strcat(arg, args[i]);
+          i++;
+        }
+        printf("%s\n", arg);
+        redirect_STDIN(arg);
+        free(arg);
+        arg = calloc(1, sizeof(char));
+        if(args[i]){
+          i-=2;
+        }
       }
+
       else{
-
+        strcat(arg, " ");
+        int size = strlen(args[i]) + strlen(arg);
+        arg = realloc(arg, size);
+        strcat(arg, args[i]);
       }
       // if(strcmp(args[i], ">")){
       //
       // }
   }
   free(args);
-  return n_args;
-
 }
 
 

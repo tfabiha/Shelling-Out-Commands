@@ -5,9 +5,7 @@ int run_multiple_cmd(char**ary);
 
 char** parse_args(char* line, char c);
 
-char** parse_args_custom(char** args);
-
-char** parse_args_custom(char** line);
+void parse_args_custom(char** args);
 
 int countTokens(char **ary);
 
