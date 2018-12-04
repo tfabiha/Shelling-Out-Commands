@@ -314,75 +314,75 @@ void redirect_STDOUT(char *ary){
 }
 
 
-void redirect_pipes(char* ary){
-  char **args = parse_args(ary, ' ');
-  parse_args_custom(args);
-}
+// void redirect_pipes(char* ary){
+//   char **args = parse_args(ary, ' ');
+//   parse_args_custom(args);
+// }
 
-void parse_args_custom(char** args){
-  // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
-  // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
-  // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
-
-  char* arg = calloc(0, sizeof(char));
-
-  for(int i = 0; args[i]; i++){
-
-      if(strcmp(args[i], ">")==0){
-
-        while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], "<") != 0){
-          strcat(arg, " ");
-          int size = strlen(args[i]) + strlen(arg);
-          arg = realloc(arg, size);
-          strcat(arg, args[i]);
-          i++;
-        }
-        redirect_STDOUT(arg);
-        free(arg);
-        arg = calloc(0, sizeof(char));
-        if(args[i]){
-          //printf("%s\n", arg);
-          i-=2;
-          //printf("%d\n", i);
-        }
-      }
-      else if(strcmp(args[i], "<") == 0){
-
-        while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], ">") != 0){
-          strcat(arg, " ");
-          int size = strlen(args[i]) + strlen(arg);
-          arg = realloc(arg, size);
-          strcat(arg, args[i]);
-          i++;
-        }
-        redirect_STDIN(arg);
-        free(arg);
-        arg = calloc(0, sizeof(char));
-        if(args[i]){
-          i-=2;
-        }
-      }
-
-      else{
-        strcat(arg, " ");
-        int size = strlen(args[i]) + strlen(arg);
-        arg = realloc(arg, size);
-        strcat(arg, args[i]);
-      }
-      // if(strcmp(args[i], ">")){
-      //
-      // }
-  }
-  free(args);
-}
+// void parse_args_custom(char** args){
+//   // printf("Gucci Pipe: %d\n", check_char_cmd(line, '|'));
+//   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
+//   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
+//
+//   char* arg = calloc(0, sizeof(char));
+//
+//   for(int i = 0; args[i]; i++){
+//
+//       if(strcmp(args[i], ">")==0){
+//
+//         while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], "<") != 0){
+//           strcat(arg, " ");
+//           int size = strlen(args[i]) + strlen(arg);
+//           arg = realloc(arg, size);
+//           strcat(arg, args[i]);
+//           i++;
+//         }
+//         redirect_STDOUT(arg);
+//         free(arg);
+//         arg = calloc(0, sizeof(char));
+//         if(args[i]){
+//           //printf("%s\n", arg);
+//           i-=2;
+//           //printf("%d\n", i);
+//         }
+//       }
+//       else if(strcmp(args[i], "<") == 0){
+//
+//         while(args[i] && strcmp(args[i], "|") != 0 && strcmp(args[i], ">") != 0){
+//           strcat(arg, " ");
+//           int size = strlen(args[i]) + strlen(arg);
+//           arg = realloc(arg, size);
+//           strcat(arg, args[i]);
+//           i++;
+//         }
+//         redirect_STDIN(arg);
+//         free(arg);
+//         arg = calloc(0, sizeof(char));
+//         if(args[i]){
+//           i-=2;
+//         }
+//       }
+//
+//       else{
+//         strcat(arg, " ");
+//         int size = strlen(args[i]) + strlen(arg);
+//         arg = realloc(arg, size);
+//         strcat(arg, args[i]);
+//       }
+//       // if(strcmp(args[i], ">")){
+//       //
+//       // }
+//   }
+//   free(args);
+// }
 
 
 int run_multiple_cmd(char **ary){
   char** argy;
   for(int i = 0; ary[i]; i++){
     if(check_char_cmd(ary[i], '>')){
-      //redirect_STDOUT(ary[i]);
-      redirect_pipes(ary[i]);
+      redirect_STDOUT(ary[i]);
+      //redirect_pipes(ary[i]);
       //run_redirection(argy, 1);
     }
     else if(check_char_cmd(ary[i], '<')){

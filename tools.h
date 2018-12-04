@@ -5,7 +5,7 @@ int run_multiple_cmd(char**ary);
 
 char** parse_args(char* line, char c);
 
-void parse_args_custom(char** args);
+// void parse_args_custom(char** args);
 
 int countTokens(char **ary);
 
@@ -19,7 +19,7 @@ void redirect_STDIN(char *ary);
 
 void redirect_STDOUT(char *ary);
 
-void redirect_pipes(char* ary);
+//void redirect_pipes(char* ary);
 
 int check_char_cmd(char *ary, char c);
 

@@ -10,16 +10,16 @@ Features:
 
 Attempted:
 The following did not end up working, but have been left in the code, commented out.
-- Could not get pipes to work
-- Tried to implement >>, but it kept overwriting the file
-- Looked at replacing ~/ with home directory, got seg faults
-- Was unable to have the "puppy" command produce a puppy and eject it from the optical drive.
+- Tried to implement multiple pipes but ......
+- Tried to implement handling redirects of different types (i.e. cmd < cmd_file > res)
+but kept on getting SEG FAULTS and misnamed files and infinite loops
 
 Bugs:
-- Putting two ;'s next to each other will break the parser
-- Redirecting to a file that does not exist occasionally does not work.
-- Hair regrowth function may result in a seg fault.
-- Occasionally, the unicorn command will fail, opening a great chasm in the earth and summoning the demon Beelzebub, who will proceeded to unleash his wrath and begin his reign of terror.
+- Multiple redirects (of different types (i.e. > <)) on the same line does not work.
+	- ls > ls.txt > l.txt WORKS
+	- sort < one.txt < two.txt < three.txt WORKS
+	- cmd < cmd_file > res DOESN'T WORK
+
 
 Files & Function Headers:
 
