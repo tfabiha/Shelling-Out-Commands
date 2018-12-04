@@ -6,7 +6,7 @@ Features:
 - Parses multiple commands on one line!
 - Redirects using >, <!
 - Pipes using |
-- Works even with multiple spaces in between commands
+- Works even with multiple spaces in between items
 
 Attempted:
 The following did not end up working, but have been left in the code, commented out.
@@ -20,7 +20,7 @@ Bugs:
 	- ls > ls.txt > l.txt WORKS
 	- sort < one.txt < two.txt < three.txt WORKS
 	- cmd < cmd_file > res DOESN'T WORK
-- Does not recognize commands if not separated by at least one space
+- Does not recognize items if not separated by at least one space
   For example:
   	ls>foo.txt //will not work
 	ls > foo.txt //will work
