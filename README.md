@@ -20,7 +20,7 @@ Bugs:
 - Redirecting to a file that does not exist occasionally does not work.
 - Hair regrowth function may result in a seg fault.
 - Occasionally, the unicorn command will fail, opening a great chasm in the earth and summoning the demon Beelzebub, who will proceeded to unleash his wrath and begin his reign of terror.
-	
+
 Files & Function Headers:
 
 tools.c Handles all commands entered into the shell
@@ -36,22 +36,24 @@ tools.c Handles all commands entered into the shell
 
 	/*======== char** parse_args() ==========
 	Inputs:  char *line, char c
-	Returns: Array of strings where each entry is a token 
+	Returns: Array of strings where each entry is a token
 	separated by c
 
-	If line contains multiple tokens separated by c, this 
+	If line contains multiple tokens separated by c, this
 	function will put each token into an array of strings
 	====================*/
 
-	/*======== char** parse_args_custom() ==========
+	/*======== void parse_args_custom() ==========
 	Inputs:  char **args
-	Returns: Array of strings where each entry contains the same sign
+	Returns: Doesn't return anything :)
+
+	Generates an array of strings where each entry contains the same sign
 	(i.e. >, <, |). Example: "tr a-z A-Z < wholist > foo"
 	==> args: ["tr", "a-z", "A-z", "<", "wholist", ">", "foo"]
 	==> ['tr a-z A-z < wholist', 'wholist > foo']
-
 	If args contains multiple different signs (<, >, |), this fuction puts
 	statements with the same sign together (i.e l > l > l, l | l | l, etc.).
+	Organizes and executes commands based on the type (>,<,|) in the statement.
 	====================*/
 
 	/*======== int count_tokens() ==========
@@ -71,7 +73,7 @@ tools.c Handles all commands entered into the shell
 	====================*/
 
 	/*======== void run_command() ==========
-	Inputs:  char **ary 
+	Inputs:  char **ary
 	Returns: Doesn't return anything :)
 
 	Runs the command in ary.
@@ -83,7 +85,7 @@ tools.c Handles all commands entered into the shell
 	Returns: Doesn't return anything :)
 
 	Same as run_command() except when the command is not found,
-	fd(STDOUT) is moved to 1. 
+	fd(STDOUT) is moved to 1.
 	====================*/
 
 	/*======== void redirect_STDIN() ==========
@@ -109,7 +111,7 @@ tools.c Handles all commands entered into the shell
 	Handles and runs command line input that contains >, <, |.
 	Example: ary ==> "ls | wc > l.txt"
 	====================*/
-	
+
 	/*======== int check_char_cmd() ==========
 	Inputs:  char *ary, char c
 	Returns: 1 if c is found, 0 if c is not found
@@ -123,7 +125,7 @@ tools.c Handles all commands entered into the shell
 
 	Handles and runs command line input that contains |.
 	====================*/
-	
+
 dojo.c
 	/*======== static void sighandler() ==========
 	Inputs:  int signo

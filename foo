@@ -1,5 +1,0 @@
-19:20  up  1:37, 3 users, load averages: 1.60 1.56 1.61
-USER     TTY      FROM              LOGIN@  IDLE WHAT
-ivan     console  -                17:45    1:35 -
-ivan     s000     -                17:55       - w
-ivan     s001     -                19:04       7 -bash
