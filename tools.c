@@ -324,7 +324,7 @@ void parse_args_custom(char** args){
   // printf("Gucci >: %d\n", check_char_cmd(line, '>'));
   // printf("Gucci <: %d\n", check_char_cmd(line, '<'));
 
-  char* arg = calloc(1, sizeof(char));
+  char* arg = calloc(0, sizeof(char));
 
   for(int i = 0; args[i]; i++){
 
@@ -339,7 +339,7 @@ void parse_args_custom(char** args){
         }
         redirect_STDOUT(arg);
         free(arg);
-        arg = calloc(1, sizeof(char));
+        arg = calloc(0, sizeof(char));
         if(args[i]){
           //printf("%s\n", arg);
           i-=2;
@@ -357,7 +357,7 @@ void parse_args_custom(char** args){
         }
         redirect_STDIN(arg);
         free(arg);
-        arg = calloc(1, sizeof(char));
+        arg = calloc(0, sizeof(char));
         if(args[i]){
           i-=2;
         }
