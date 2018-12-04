@@ -104,22 +104,22 @@ void piping(char *ary){
 
   int count = 0;
 
-  int reg_in = dup(STDIN_FILENO);
-  int reg_out = dup(STDOUT_FILENO);
+  // int reg_in = dup(STDIN_FILENO);
+  // int reg_out = dup(STDOUT_FILENO);
 
   for (int i = 0; args[i]; i++)
     {
       count++;
     }
 
-  int * fd[count];
+  // int * fd[count];
   //printf("Count: %d\n", count);
 
-  for (int i = 0; i < count; i++)
-    {
-      fd[i] = (int *) malloc(2 * sizeof(int));
-      pipe(fd[i]);
-    }
+  // for (int i = 0; i < count; i++)
+  //   {
+  //     fd[i] = (int *) malloc(2 * sizeof(int));
+  //     pipe(fd[i]);
+  //   }
 
   FILE * input;
   FILE * output;
@@ -136,7 +136,7 @@ void piping(char *ary){
   pclose(output);
   pclose(input);
 
-
+  ///// ATTEMPTED MULTI PIPE FUNCTIONALITY
   /* for (int i = 0; i < count; i++) */
   /*   { */
   /*     if (i == 0) */

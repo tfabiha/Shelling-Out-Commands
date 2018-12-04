@@ -10,11 +10,7 @@
 
 static void sighandler(int signo)
 {
-  if (signo == SIGINT)
-  {
-    printf("\033[0m\n");
-    exit(EXIT_SUCCESS);
-  }
+
 }
 
 int main(int argc, char **argv){
@@ -22,6 +18,10 @@ int main(int argc, char **argv){
   while(1)
   {
     signal(SIGINT, sighandler);
+    signal(SIGQUIT, sighandler);
+    signal(SIGILL, sighandler);
+    signal(SIGTRAP, sighandler);
+    signal(SIGABRT, sighandler);
 
     char cmds[100];
     char cwd[1024];
