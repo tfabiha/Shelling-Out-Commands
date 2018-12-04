@@ -10,7 +10,8 @@ Features:
 
 Attempted:
 The following did not end up working, but have been left in the code, commented out.
-- Tried to implement multiple pipes but ......
+- Tried to implement multiple pipes but could only use a single pipe. Multiple pipes 
+can still be typed in the shell however, only the first two commands will run.
 - Tried to implement handling redirects of different types (i.e. cmd < cmd_file > res)
 but kept on getting SEG FAULTS and misnamed files and infinite loops
 
